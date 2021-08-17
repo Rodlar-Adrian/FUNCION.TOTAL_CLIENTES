@@ -1,0 +1,30 @@
+create or replace NONEDITIONABLE function         numero_total_clientes_x_id_clientes(p_id_cliente in number) return number is
+
+total_clientes number;
+
+-----creamos un cusor 
+cursor clientes_cursor(p_id_cliente number)is
+select count(0) as total_clientes
+from ventas.cliente
+where id_cliente = p_id_cliente;
+
+
+begin
+
+----cuerpo de la funcion
+
+for i in clientes_cursor(p_id_cliente) loop
+total_clientes := i.total_clientes;
+
+end loop;
+
+return total_clientes;
+
+
+exception
+
+WHEN OTHERS THEN
+total_clientes := -1;
+return total_clientes;
+
+end;
